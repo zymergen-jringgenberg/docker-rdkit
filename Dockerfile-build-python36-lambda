@@ -10,6 +10,7 @@ FROM lambci/lambda:build-python3.6
 # For the time being, exclude installing the boost packages and instead build from source.
 # We can revert this once updated boost packages are available.
 
+RUN yum install -y epel-release
 RUN yum install -y --enablerepo=epel --setopt=tsflags=nodocs --setopt=override_install_langs=en_US.utf8\
   readline-devel\
   zlib-devel\
@@ -41,18 +42,18 @@ RUN pip install numpy
 # Here we build boost from source.
 # This will be unnecessary once updated boost packages are available.
 WORKDIR /root/boost
-RUN curl -L -o boost.tgz http://sourceforge.net/projects/boost/files/boost/1.56.0/boost_1_56_0.tar.gz &&\
+RUN curl -L -o boost.tgz http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz &&\
   tar xfz boost.tgz &&\
   rm -f boost.tgz &&\
-  cd boost_1_56_0 &&\
-  ./bootstrap.sh --with-libraries=python,serialization &&\
+  cd boost_1_58_0 &&\
+  ./bootstrap.sh --with-libraries=python,serialization,system,iostreams &&\
   ./b2 install
 
 # Tar up the built libraries (which have been installed into /usr/local/lib)
 # as we'll need them for the runtime images.
 # They need to go in /usr/lib64
 WORKDIR /usr/local/lib
-RUN  tar cvfz /root/boost-1.56.0.tgz libboost*so.*
+RUN  tar cvfz /root/boost-1.58.0.tgz libboost*so.*
 
 WORKDIR /
 
@@ -72,7 +73,7 @@ RUN cmake3 -Wno-dev\
   -DPYTHON_EXECUTABLE=/var/lang/bin/python3.6\
   -DPYTHON_INCLUDE_DIR=/var/lang/include/python3.6\
   -DPYTHON_LIBRARY=/var/lang/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.a\
-  -DBOOST_ROOT=/root/boost/boost_1_56_0\
+  -DBOOST_ROOT=/root/boost/boost_1_58_0\
   -DLIB_SUFFIX=64\
   -DRDK_INSTALL_INTREE=OFF\
   -DRDK_BUILD_INCHI_SUPPORT=ON\
