@@ -9,6 +9,7 @@ DBO=${DOCKER_BUILD_OPTS:---no-cache}
 # build RDKit
 docker build $DBO -f Dockerfile-build-debian\
   -t $BASE/rdkit-build-debian:$DOCKER_TAG\
+  --build-arg POSTGRES_VERSION=12\
   --build-arg GIT_REPO=$GIT_REPO\
   --build-arg GIT_BRANCH=$GIT_BRANCH\
   --build-arg GIT_TAG=$GIT_TAG .

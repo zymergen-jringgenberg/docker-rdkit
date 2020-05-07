@@ -9,7 +9,12 @@ LABEL maintainer="Tim Dudgeon<tdudgeon@informaticsmatters.com>"
 ARG GIT_REPO
 ARG GIT_BRANCH=master
 ARG GIT_TAG
-ARG POSTGRES_VERSION=11
+ARG POSTGRES_VERSION=12
+
+RUN apt-get update &&\
+ apt-get -y install curl ca-certificates gnupg &&\
+ curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
+ echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" >  /etc/apt/sources.list.d/pgdg.list
 
 RUN apt-get update &&\
   #apt-get upgrade -y &&\

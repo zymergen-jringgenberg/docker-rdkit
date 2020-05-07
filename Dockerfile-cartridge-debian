@@ -7,7 +7,7 @@
 FROM debian:buster
 LABEL maintainer="Tim Dudgeon<tdudgeon@informaticsmatters.com>"
 
-ENV PG_MAJOR=11
+ENV PG_MAJOR=12
 ARG DOCKER_TAG=latest
 
 # This adds the postgres apt repos as postgresql-10 is not available for buster 
