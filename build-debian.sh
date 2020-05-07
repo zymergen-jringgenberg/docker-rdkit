@@ -19,7 +19,7 @@ rm -rf artifacts/debian/$DOCKER_TAG
 mkdir -p artifacts/debian/$DOCKER_TAG
 mkdir -p artifacts/debian/$DOCKER_TAG/debs
 mkdir -p artifacts/debian/$DOCKER_TAG/java
-docker run -it --rm -u $(id -u)\
+docker run --rm -u $(id -u)\
   -v $PWD/artifacts/debian/$DOCKER_TAG:/tohere:Z\
   $BASE/rdkit-build-debian:$DOCKER_TAG bash -c 'cp /rdkit/build/*.deb /tohere/debs && cp /rdkit/Code/JavaWrappers/gmwrapper/org.RDKit.jar /rdkit/Code/JavaWrappers/gmwrapper/libGraphMolWrap.so /rdkit/Code/JavaWrappers/gmwrapper/javadoc.tgz /tohere/java'
 
